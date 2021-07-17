@@ -1,12 +1,9 @@
 import os
-import pandas as pd
-from pandas import read_fwf
 import numpy as np
-from numpy import empty
+from numpy import empty, loadtxt
 from database_api import Writer
 from tqdm import tqdm, trange
 from my_thread import ThreadWithReturn
-import cython
 
 #KDD cup pytorch geometric compatible dataset
 # data_df = pd.read_csv('/data3/kaleb.dickerson2001/Datasets/KDD-pyg-dataset/pcqm4m_kddcup2021/raw/data.csv.gz')
@@ -22,7 +19,7 @@ def isolate_smiles(file_path) -> str:
     return: smiles string
     """
     # simply returns smiles
-    smile = pd.read_fwf(file_path).columns[3]
+    smile = loadtxt(file_path, dtype=str)[3]
     return smile
 
 def get_coordinates(file_path) -> np.array:
@@ -31,15 +28,12 @@ def get_coordinates(file_path) -> np.array:
     extracts information as list of tuples
     return: list of tuples
     """
-    file = read_fwf(file_path)
-    arr_x = file.iloc[:,[1]].astype('float32').to_numpy().flatten()
-    arr_y = file.iloc[:,[2]].astype('float32').to_numpy().flatten()
-    arr_z = file.iloc[:,[3]].astype('float32').to_numpy().flatten()
-    length = len(arr_x)
-
+    data = loadtxt(file_path,delimiter="\n",dtype=str)[1:]
+    length = len(data)
     to_return = empty(length, dtype=tuple)
     for i in range(length):
-        to_return[i] = (arr_x[i],arr_y[i],arr_z[i])
+        line = data[i].split()
+        to_return[i] = (line[1], line[2], line[3])
     return to_return
 
 
@@ -72,7 +66,7 @@ for file in tqdm(file_list):
     path_to_extracted = "".join([path_to_tars, f"/Compound_{start_pad}_{end_pad}"])
     # delete all files but smiles and coordinates
     # os.system(f"cd {path_to_extracted} && find . -name *.PM6.* -type f -delete")
-    arr = np.empty(25000, dtype=tuple)
+    arr = np.empty(5000, dtype=tuple)
     size = 0
 
     for i in range(start, end+1):
@@ -96,6 +90,9 @@ for file in tqdm(file_list):
 
             arr[size] = (smile, str(coords))
             size += 1
+            if size == 5000:
+                db_writer.add_entries(arr[:size])
+                size = 0
 
             # db_writer.add_entry(smile, coords)
             # if the molecule isnt presesnt in KDD dataset delete it
