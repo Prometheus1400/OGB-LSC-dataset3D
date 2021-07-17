@@ -3,3 +3,7 @@ __pycache__
 removed_log.txt
 extractor_log.txt
 query_tester.py
+extractor.c
+extractor.cpython*
+build/
+setup.py
