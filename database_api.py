@@ -22,6 +22,10 @@ class Writer:
         self.c.execute(f"INSERT INTO entries VALUES ('{smile}','{coords}')")
         self.conn.commit()
     
+    def add_entries(self, combined):
+        self.c.executemany(f"INSERT INTO entries VALUES (?, ?)", combined)
+        self.conn.commit()
+    
     def clear(self):
         self.c.execute("DELETE FROM entries")
         self.conn.commit()
