@@ -32,9 +32,12 @@ class Writer:
 class Reader:
     def __init__(self, path):
         self.path = path
-        self.conn = sqlite3.connect(path)
-        self.c = self.conn.cursor()
-        print(f"Connected to existing database with 'entries' table")
+        try:
+            self.conn = sqlite3.connect(path)
+            self.c = self.conn.cursor()
+            print(f"Connected to existing database with 'entries' table")
+        except Exception:
+            print("database doesnt exist at this path")
     
     def get_coords(self, smile):
         self.c.execute(f"SELECT coords FROM entries WHERE smile='{smile}'")

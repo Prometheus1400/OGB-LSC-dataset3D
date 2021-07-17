@@ -2,3 +2,4 @@ ogb/
 __pycache__
 removed_log.txt
 extractor_log.txt
+query_tester.py
