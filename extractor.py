@@ -4,8 +4,9 @@ from pandas import read_fwf
 import numpy as np
 from numpy import empty
 from database_api import Writer
-from tqdm import tqdm
+from tqdm import tqdm, trange
 from my_thread import ThreadWithReturn
+import cython
 
 #KDD cup pytorch geometric compatible dataset
 # data_df = pd.read_csv('/data3/kaleb.dickerson2001/Datasets/KDD-pyg-dataset/pcqm4m_kddcup2021/raw/data.csv.gz')
@@ -24,7 +25,7 @@ def isolate_smiles(file_path) -> str:
     smile = pd.read_fwf(file_path).columns[3]
     return smile
 
-def get_coordinates(file_path) -> list:
+def get_coordinates(file_path) -> np.array:
     """
     input: .xyz file
     extracts information as list of tuples
@@ -71,6 +72,8 @@ for file in tqdm(file_list):
     path_to_extracted = "".join([path_to_tars, f"/Compound_{start_pad}_{end_pad}"])
     # delete all files but smiles and coordinates
     # os.system(f"cd {path_to_extracted} && find . -name *.PM6.* -type f -delete")
+    arr = np.empty(25000, dtype=tuple)
+    size = 0
 
     for i in range(start, end+1):
         i_pad = str(i).zfill(9)
@@ -91,13 +94,17 @@ for file in tqdm(file_list):
             smile = t1.join()
             coords = t2.join()
 
-            db_writer.add_entry(smile, coords)
+            arr[size] = (smile, str(coords))
+            size += 1
+
+            # db_writer.add_entry(smile, coords)
             # if the molecule isnt presesnt in KDD dataset delete it
             # if not smile_in_KDD_dataset(smile, i_pad):
             #     os.system(f"cd {path_to_extracted} && rm -r {i_pad}")
         # else:
             # if molecule file doesnt exist log it
             # extractor_log.write(f"No Molecule {i_pad}\n")
+    db_writer.add_entries(arr[:size])
     os.system(f"cd {path_to_tars} && rm -r Compound_{start_pad}_{end_pad}")
 # extractor_log.close()
 # removed_log.close()
