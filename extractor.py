@@ -5,17 +5,13 @@ from database_api import Writer
 from tqdm import tqdm, trange
 from my_thread import ThreadWithReturn
 
-#KDD cup pytorch geometric compatible dataset
-# data_df = pd.read_csv('/data3/kaleb.dickerson2001/Datasets/KDD-pyg-dataset/pcqm4m_kddcup2021/raw/data.csv.gz')
-# extractor_log = open("extractor_log.txt", "w")
-# removed_log = open("removed_log.txt", "w")
+
 db_writer = Writer("/data3/kaleb.dickerson2001/Datasets/PubChem3D/smile_coord.db")
 error_log = open("error_log.txt", "w")
 
-def isolate_smiles(file_path) -> str:
+def get_smiles(file_path) -> str:
     """
     input: .info file
-    clears out extraneous information
     return: smiles string
     """
     # simply returns smiles
@@ -23,14 +19,14 @@ def isolate_smiles(file_path) -> str:
         smile = loadtxt(file_path, dtype=str)[3]
         return smile
     except:
-        error_log.write(f"error in isolate_smiles at file: {file_path}\n")
+        error_log.write(f"error in get_smiles at file: {file_path}\n")
         return "NONE"
 
 def get_coordinates(file_path) -> np.array:
     """
     input: .xyz file
-    extracts information as list of tuples
-    return: list of tuples
+    extracts information as array of tuples
+    return: array of tuples
     """
     try:
         data = loadtxt(file_path,delimiter="\n",dtype=str)[1:]
@@ -45,18 +41,7 @@ def get_coordinates(file_path) -> np.array:
         return -1
 
 
-
-# def smile_in_KDD_dataset(smile, index) -> bool:
-#     """
-#     specifies if molecule is present in KDD dataset
-#     """
-#     i = data_df[data_df.smiles == smile].first_valid_index()
-#     if i == None:
-#         removed_log.write(f"deleted unpresent {index} | {smile}\n")
-#         return False
-#     else:
-#         return True
-
+# each tar file contains information for ~25,000 molecules
 path_to_tars = "/data3/kaleb.dickerson2001/Datasets/PubChem3D"
 file_list = []
 for file in os.listdir(path_to_tars):
@@ -70,10 +55,10 @@ for file in tqdm(file_list):
     start_pad = str(start).zfill(9)
     end_pad = str(end).zfill(9)
     
+    # extract the files
     os.system(f"cd {path_to_tars} && tar xf {file}")
     path_to_extracted = "".join([path_to_tars, f"/Compound_{start_pad}_{end_pad}"])
-    # delete all files but smiles and coordinates
-    # os.system(f"cd {path_to_extracted} && find . -name *.PM6.* -type f -delete")
+    # array to store smile,coordinate pairs before writing to database
     arr = np.empty(5000, dtype=tuple)
     size = 0
 
@@ -87,30 +72,22 @@ for file in tqdm(file_list):
         exists = os.path.isdir(mol_dir_path)
 
         if exists:
-            # returns smile string and removes other info from the file
-            # smile = isolate_smiles(f"{file_base_path}.20160829.info")
-            # coords = get_coordinates(f"{file_base_path}.initial.xyz")
-            t1 = ThreadWithReturn(target=isolate_smiles, args=(f"{file_base_path}.20160829.info",))
+            # two different threads to read the information in from files
+            t1 = ThreadWithReturn(target=get_smiles, args=(f"{file_base_path}.20160829.info",))
             t2 = ThreadWithReturn(target=get_coordinates, args=(f"{file_base_path}.initial.xyz",))
             t1.start(),t2.start()
             smile = t1.join()
             coords = t2.join()
 
+            # write pair to array
             arr[size] = (smile, str(coords))
             size += 1
+            # writes to database in batches of 5000
             if size == 5000:
                 db_writer.add_entries(arr[:size])
                 size = 0
 
-            # db_writer.add_entry(smile, coords)
-            # if the molecule isnt presesnt in KDD dataset delete it
-            # if not smile_in_KDD_dataset(smile, i_pad):
-            #     os.system(f"cd {path_to_extracted} && rm -r {i_pad}")
-        # else:
-            # if molecule file doesnt exist log it
-            # extractor_log.write(f"No Molecule {i_pad}\n")
     db_writer.add_entries(arr[:size])
+    # remove extracted file, would quickly consume too much storage otherwise
     os.system(f"cd {path_to_tars} && rm -r Compound_{start_pad}_{end_pad}")
-# extractor_log.close()
-# removed_log.close()
 error_log.close()
