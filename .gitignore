@@ -7,3 +7,4 @@ extractor.c
 extractor.cpython*
 build/
 setup.py
+error_log.txt

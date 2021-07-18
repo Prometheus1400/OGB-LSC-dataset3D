@@ -10,7 +10,7 @@ from my_thread import ThreadWithReturn
 # extractor_log = open("extractor_log.txt", "w")
 # removed_log = open("removed_log.txt", "w")
 db_writer = Writer("/data3/kaleb.dickerson2001/Datasets/PubChem3D/smile_coord.db")
-
+error_log = open("error_log.txt", "w")
 
 def isolate_smiles(file_path) -> str:
     """
@@ -19,8 +19,12 @@ def isolate_smiles(file_path) -> str:
     return: smiles string
     """
     # simply returns smiles
-    smile = loadtxt(file_path, dtype=str)[3]
-    return smile
+    try:
+        smile = loadtxt(file_path, dtype=str)[3]
+        return smile
+    except:
+        error_log.write(f"error in isolate_smiles at file: {file_path}\n")
+        return "NONE"
 
 def get_coordinates(file_path) -> np.array:
     """
@@ -28,13 +32,17 @@ def get_coordinates(file_path) -> np.array:
     extracts information as list of tuples
     return: list of tuples
     """
-    data = loadtxt(file_path,delimiter="\n",dtype=str)[1:]
-    length = len(data)
-    to_return = empty(length, dtype=tuple)
-    for i in range(length):
-        line = data[i].split()
-        to_return[i] = (line[1], line[2], line[3])
-    return to_return
+    try:
+        data = loadtxt(file_path,delimiter="\n",dtype=str)[1:]
+        length = len(data)
+        to_return = empty(length, dtype=tuple)
+        for i in range(length):
+            line = data[i].split()
+            to_return[i] = (line[1], line[2], line[3])
+        return to_return
+    except:
+        error_log.write(f"error in get_coordinates at file: {file_path}\n")
+        return -1
 
 
 
@@ -105,3 +113,4 @@ for file in tqdm(file_list):
     os.system(f"cd {path_to_tars} && rm -r Compound_{start_pad}_{end_pad}")
 # extractor_log.close()
 # removed_log.close()
+error_log.close()
