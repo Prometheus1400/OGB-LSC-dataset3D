@@ -9,7 +9,7 @@ In addition to this there is a large database located at **/data3/kaleb.dickerso
 Here is an example how to use the API.
 ![alt text](images/example_api.png "Title")
 
-For you to copy :
+For you to copy:  
 import sys
 sys.path.insert(1,'/data3/kaleb.dickerson2001/Datasets/PubChem3D/db_api.py')
 from db_api import Reader
