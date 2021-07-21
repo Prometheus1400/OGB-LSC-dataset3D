@@ -8,3 +8,5 @@ extractor.cpython*
 build/
 setup.py
 error_log.txt
+ogb_test.py
+create_kdd_dataset3D.py
