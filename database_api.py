@@ -1,4 +1,5 @@
 import sqlite3
+import numpy as np
 
 class Writer:
     def __init__(self, path):
@@ -39,14 +40,29 @@ class Reader:
         try:
             self.conn = sqlite3.connect(path)
             self.c = self.conn.cursor()
-            print(f"Connected to existing database with 'entries' table")
+            print("Connected to existing database with 'entries' table")
         except Exception:
             print("database doesnt exist at this path")
     
     def get_coords(self, smile):
+        """
+        input:str smiles representation for molecule
+        return:np.array[tuple] each tuple contains x,y,z coordinate for each atom
+        """
         self.c.execute(f"SELECT coords FROM entries WHERE smile='{smile}'")
-        coords = self.c.fetchone()[0]
-        return coords
+
+        try:
+            coords = self.c.fetchone()[0]
+            return coords
+        except Exception:
+            return -1
+
+    def add_index(self, index_name, column):
+        # this was most likely already performed
+        print("adding indexes...")
+        self.c.execute(f"CREATE INDEX {index_name} ON entries({column})")
+        self.conn.commit()
+        print("done")
     
     def __del__(self):
         self.conn.close()
