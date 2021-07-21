@@ -12,9 +12,9 @@ Here is an example how to use the API.
 ![alt text](images/example_api.png "Title")
 
 **For you to copy**:  
-import sys
-sys.path.insert(1,'/data3/kaleb.dickerson2001/Datasets/PubChem3D/db_api.py')
-from db_api import Reader
-reader = Reader('/data3/kaleb.dickerson2001/Datasets/PubChem3D/smile_coord.db')
-coordinates = reader.get_coords("smiles string here")
+import sys  
+sys.path.insert(1,'/data3/kaleb.dickerson2001/Datasets/PubChem3D/db_api.py')  
+from db_api import Reader  
+reader = Reader('/data3/kaleb.dickerson2001/Datasets/PubChem3D/smile_coord.db')  
+coordinates = reader.get_coords("smiles string here")  
 
