@@ -6,5 +6,5 @@ There is a pytorch geometric compatible version of the OGB-LSC dataset augmented
 
 In addition to this there is a large database located at **/data3/kaleb.dickerson2001/Datasets/PubChem3D** which contains smiles strings and corresponding coordinates. There is also a simple API in the same directory you can use to query this database with the smiles string and recieve the coodinates as an array of tuples. -1 indicates that smiles string was not found in database.
 
-![alt text](images/Isolated.png "Title")
+![alt text](images/example_api.png "Title")
 
