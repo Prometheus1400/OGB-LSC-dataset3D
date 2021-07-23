@@ -3,19 +3,19 @@ import numpy as np
 from numpy import empty, loadtxt
 from database_api import Writer
 from tqdm import tqdm, trange
-from my_thread import ThreadWithReturn
 from utils import get_coordinates
 
 
 db_writer = Writer("/data3/kaleb.dickerson2001/Datasets/PubChem3D/smile_coord.db")
 error_log = open("error_log.txt", "w")
+write_log = open("write_log", "w")
 
 
 # each tar file contains information for ~25,000 molecules
 path_to_tars = "/data3/kaleb.dickerson2001/Datasets/PubChem3D"
 file_list = []
 for file in os.listdir(path_to_tars):
-    if file.endswith(".tar.xz"):
+    if file.endswith(".tar.gz"):
         file_list.append(file)
 file_list.sort()
 
@@ -57,4 +57,5 @@ for file in tqdm(file_list):
     db_writer.add_entries(arr[:size])
     # remove extracted file, would quickly consume too much storage otherwise
     os.system(f"cd {path_to_tars} && rm -r Compound_{start_pad}_{end_pad}")
+    write_log.write(f"Finished processing: {file}\n")
 error_log.close()
