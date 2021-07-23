@@ -2,6 +2,7 @@ from rdkit import Chem
 import pubchempy
 from numpy import loadtxt
 from threading import Thread
+import numpy as np
 
 class ThreadWithReturn(Thread):
     def __init__(self, group=None, target=None, name=None,
@@ -59,6 +60,13 @@ def get_coordinates(file_path, error_log=None) -> str:
         if error_log != None:
             error_log.write(f"error in get_coordinates at file: {file_path}\n")
         return -1
+
+def split_into(file_list, num_splits):
+    chunk = np.array_split(np.array(file_list),num_splits)
+    for i in range(len(chunk)):
+        chunk[i] = list(chunk[i])
+    
+    return chunk
 
 # def get_smiles(file_path) -> str:
 #     """
