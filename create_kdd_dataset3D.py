@@ -1,11 +1,4 @@
 import sys
-sys.path.insert(1,'/data3/kaleb.dickerson2001/Datasets/PubChem3D/db_api.py')
-from db_api import Reader
-
-reader = Reader('/data3/kaleb.dickerson2001/Datasets/PubChem3D/smile_coord.db')
-coordinates = reader.get_coords("smiles string here")
-
-
 sys.path.insert(1,'/home/ugrads/k/kaleb.dickerson2001/pcqm4m_dataset_with_coordinates/ogb')
 from ogb.lsc import PygPCQM4MDataset, PCQM4MEvaluator
 from ogb.utils import smiles2graph
@@ -16,7 +9,7 @@ import numpy as np
 # for this to work, processes folder must be empty
 # uses modified ogb code
 dataset = PygPCQM4MDataset(
-    root="/data3/kaleb.dickerson2001/Datasets/KDD-pyg-dataset",
+    root="/data3/kaleb.dickerson2001/Datasets/OGB-LSC-3D",
     smiles2graph=smiles2graph,
 )
 
