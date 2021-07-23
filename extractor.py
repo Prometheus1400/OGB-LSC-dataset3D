@@ -63,10 +63,11 @@ for file in os.listdir(path_to_tars):
 file_list.sort()
 
 if __name__ == "__main__":
-    NUM_PROCESSES = 8
+    NUM_PROCESSES = 12
     file_list_fragmented = split_into(file_list, NUM_PROCESSES)
     # print(file_list_fragmented)
     with Pool() as pool:
             pool.map(write2database, file_list_fragmented)
 
 error_log.close()
+print("Processes complete")
