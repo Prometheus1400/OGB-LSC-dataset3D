@@ -4,6 +4,7 @@ from database_api import Writer
 from tqdm import tqdm
 from utils import get_coordinates, split_into
 from multiprocessing import Pool
+from random import shuffle
 
 error_log = open("error_log.txt", "w")
 
@@ -52,6 +53,7 @@ def write2database(file_list):
         db_writer.add_entries(arr[:size])
         # remove extracted file, would quickly consume too much storage otherwise
         os.system(f"cd {path_to_tars} && rm -r Compound_{start_pad}_{end_pad}")
+        # os.system(f"cd {path_to_tars} && rm {file}")
     return
 
 # each tar file contains information for ~25,000 molecules
@@ -61,6 +63,7 @@ for file in os.listdir(path_to_tars):
     if file.endswith(".tar.gz"):
         file_list.append(file)
 file_list.sort()
+shuffle(file_list)
 
 if __name__ == "__main__":
     NUM_PROCESSES = 12
