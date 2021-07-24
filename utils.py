@@ -3,6 +3,8 @@ import pubchempy
 from numpy import loadtxt
 from threading import Thread
 import numpy as np
+from database_api import Writer
+import os
 
 class ThreadWithReturn(Thread):
     def __init__(self, group=None, target=None, name=None,
@@ -67,6 +69,19 @@ def split_into(file_list, num_splits):
         chunk[i] = list(chunk[i])
     
     return chunk
+
+def combine_databases(target_db:str, path:str) -> None:
+    """
+    combines all databases from target directory with
+    the target database
+    """
+    files = []
+    for file in os.listdir(path):
+        if file.endswith(".db") and file != target_db:
+            files.append(file)
+    writer = Writer(target_db)
+    for db in files:
+        writer.combine_with(db)
 
 # def get_smiles(file_path) -> str:
 #     """
