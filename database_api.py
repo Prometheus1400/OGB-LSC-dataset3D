@@ -1,4 +1,6 @@
 import sqlite3
+import utils
+import numpy as np
 
 class Writer:
     def __init__(self, path):
@@ -27,6 +29,18 @@ class Writer:
         self.c.executemany(f"INSERT INTO entries VALUES (?, ?)", combined)
         self.conn.commit()
     
+    def combine_with(self, other_db):
+        self.c.execute(f"attach '{other_db}' as toMerge")
+        self.c.execute("BEGIN")
+        self.c.execute("insert into entries select * from toMerge.entries")
+        self.c.execute("COMMIT")
+        self.c.execute("detach toMerge")
+    
+    def add_smiles(self,combined, type='isomeric'):
+        #combined is (smiles, CID)
+        self.c.executemany(f"UPDATE entries SET {type}_SMILES = ? WHERE CID = ?", combined)
+        self.conn.commit()
+    
     def clear(self):
         self.c.execute("DELETE FROM entries")
         self.conn.commit()
@@ -50,13 +64,26 @@ class Reader:
         return:np.array[tuple] each tuple contains x,y,z coordinate for each atom
         """
         self.c.execute(f"SELECT coords FROM entries WHERE CID='{CID}'")
+        try:
+            coords = self.c.fetchone()[0]
+            coords = coords.split()
 
-        # try:
-        #     coords = self.c.fetchone()[0]
-        #     return coords
-        # except Exception:
-        #     return -1
-        return self.c.fetchall()
+            num_splits = len(coords) // 3
+            coords = utils.split_into(coords, num_splits)
+            return coords
+        except Exception:
+            print(f"CID : {CID} NOT PRESENT")
+            return -1
+
+    def get_all_CIDs(self):
+        self.c.execute("SELECT CID FROM entries")
+        total = self.c.fetchall()
+
+        to_return = np.empty(len(total), dtype=int)
+        for i,tup in enumerate(total):
+            to_return[i] = tup[0]
+
+        return to_return
     
     def __del__(self):
         self.conn.close()
