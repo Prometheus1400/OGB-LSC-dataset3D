@@ -72,11 +72,11 @@ class Reader:
             coords = utils.split_into(coords, num_splits)
             return coords
         except Exception:
-            print(f"CID : {CID} NOT PRESENT")
+            print(f"CID : {CID} NOT PRESENT OR COORDS NOT AVAILABLE")
             return -1
 
     def get_all_CIDs(self):
-        self.c.execute("SELECT CID FROM entries")
+        self.c.execute("SELECT CID FROM entries WHERE canonical_SMILES IS NULL")
         total = self.c.fetchall()
 
         to_return = np.empty(len(total), dtype=int)

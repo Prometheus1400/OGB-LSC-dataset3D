@@ -1,3 +1,4 @@
+from typing import List
 from rdkit import Chem
 import pubchempy
 from numpy import loadtxt
@@ -53,24 +54,6 @@ def smile2CID(smile):
     cid = compounds[0].cid
     return cid
 
-def CIDs2smiles(CID_list):
-    Lists = []
-
-    num_splits = len(CID_list) // 1000
-    if num_splits == 0:
-        num_splits = 1
-    # call the pubchem api in batches of 1000
-    CID_split = split_into(CID_list, num_splits)
-
-    for cids in tqdm(CID_split):
-        compounds = pcp.get_compounds(cids, as_dataframe=False)
-        to_append = np.empty(len(compounds), dtype=tuple)
-        for i in range(len(compounds)):
-            to_append[i] = (compounds[i].canonical_smiles, compounds[i].cid)
-        Lists.append(to_append)
-    
-    to_return = np.concatenate(Lists)
-    return to_return
 
 
 # def combine_databases(target_db:str, path:str) -> None:
