@@ -4,9 +4,10 @@ import numpy as np
 from utils import split_into, ThreadWithReturn
 import time
 from random import shuffle
-from tqdm import tqdm
+from tqdm import tqdm, trange
 import pandas as pd
 import pubchempy as pcp
+from rdkit import Chem
 
 def CIDs2smiles(CID_list):
     Lists = []
@@ -50,9 +51,25 @@ def smiles2CIDs(SMILES_list):
         return np.concatenate(Lists)
     return Lists
 
-smiles = list(pd.read_csv("/data3/kaleb.dickerson2001/Datasets/OGB-LSC-3D/pcqm4m_kddcup2021/raw/data.csv.gz")['smiles'].to_numpy())[:10]
-print(smiles)
-print(smiles2CIDs(smiles))
+reader = Reader("/data3/kaleb.dickerson2001/Datasets/PubChem3D/coord_db.db")
+smiles = reader.get_all_SMILES()
+del(reader)
+
+new_smiles = np.empty(len(smiles), dtype=tuple)
+writer = Writer("/data3/kaleb.dickerson2001/Datasets/PubChem3D/coord_db.db")
+for i in trange(len(smiles)):
+    try:
+        new_smile = Chem.MolToSmiles(Chem.MolFromSmiles(smiles[i]))
+    except Exception:
+        new_smile = smiles[i]
+        print(f"failed to convert {smiles[i]}")
+    new_smiles[i] = (new_smile, smiles[i])
+
+writer.add_smiles(new_smiles)
+
+# smiles = list(pd.read_csv("/data3/kaleb.dickerson2001/Datasets/OGB-LSC-3D/pcqm4m_kddcup2021/raw/data.csv.gz")['smiles'].to_numpy())[:10]
+# print(smiles)
+# print(smiles2CIDs(smiles))
 
 
 # if __name__ == "__main__":

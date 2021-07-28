@@ -11,3 +11,4 @@ error_log.txt
 ogb_test.py
 temp_storage/
 PubChemPy/
+test.py

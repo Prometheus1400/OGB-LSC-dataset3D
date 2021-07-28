@@ -37,8 +37,8 @@ class Writer:
         self.c.execute("detach toMerge")
     
     def add_smiles(self,combined, type='isomeric'):
-        #combined is (smiles, CID)
-        self.c.executemany(f"UPDATE entries SET {type}_SMILES = ? WHERE CID = ?", combined)
+        #combined is (new smiles, old smiles)
+        self.c.executemany(f"UPDATE entries SET {type}_SMILES = ? WHERE {type}_SMILES = ?", combined)
         self.conn.commit()
     
     def clear(self):
@@ -82,6 +82,16 @@ class Reader:
         to_return = np.empty(len(total), dtype=int)
         for i,tup in enumerate(total):
             to_return[i] = tup[0]
+
+        return to_return
+    
+    def get_all_SMILES(self):
+        self.c.execute("SELECT isomeric_SMILES FROM entries WHERE isomeric_SMILES NOT NULL")
+        total = self.c.fetchall()
+
+        to_return = []
+        for i,tup in enumerate(total):
+            to_return.append(tup[0])
 
         return to_return
     
