@@ -3,8 +3,9 @@ All data is hosted on the shared drive.
 # Overview of PubChemQC
 The OGB-LSC dataset is a based of the PubChemQC dataset (which is itself a subset of PubChem). OGB-LSC contains 3,803,453 molecules and PubChemQC contains 3,981,230.
 The main contributions of the PubChemQC dataset are as follows:
-*Molecular structures optimized by density functional theory (DFT)
-*Calculated the excited states for over 2 million molecules using time-dependent DFT (TDDFT)
+* Molecular structures optimized by density functional theory (DFT)
+* Calculated the excited states for over 2 million molecules using time-dependent DFT (TDDFT)
+Note that PubChemQC does not provide SMILES or InChI representations directly, this information is in The PubChem Project
 
 ## OGB-LSC Dataset With 3D Information
 
