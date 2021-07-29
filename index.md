@@ -2,6 +2,8 @@ All data is hosted on the shared drive.
 
 #### Table of contents
 1. [Overview of PubChemQC](#1)
+2. [OGB-LSC Dataset With 3D Information](#2)
+3. [Local Database](#3)
 
 ## Overview of PubChemQC  <a id="1"></a>
 The OGB-LSC dataset is a based of the PubChemQC dataset (which is itself a subset of PubChem). OGB-LSC contains 3,803,453 molecules and PubChemQC contains 3,981,230. The PubChemQC dataset was generated using only CID (Chemical ID), InChI, and isomeric SMILES. All the calculations were performed from this information.
@@ -14,7 +16,7 @@ Note that PubChemQC does not provide SMILES or InChI representations directly, t
 
 There is a pytorch geometric compatible version of the OGB-LSC dataset augmented with 3D information located at **/mnt/dive/shared/kaleb/Datasets/OGB-LSC-3D**. This should already be processed and be compatible with your OGB package. Note that the number of features per node is now 12 (from 9). The x, y, and z coordinates are at the end of the feature vector.
 
-## Smiles and Coordinates Database <a id="3"></a>
+## Local Database <a id="3"></a>
 
 In addition to this there is a large database located at **/mnt/dive/shared/kaleb/Datasets/PubChem3D** which contains smiles strings and corresponding coordinates. There is also a simple API in the same directory you can use to query this database with the smiles string and recieve the coodinates as an array of tuples. -1 indicates that smiles string was not found in database.
 
