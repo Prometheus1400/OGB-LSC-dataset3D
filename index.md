@@ -16,11 +16,11 @@ Note that PubChemQC does not provide SMILES or InChI representations directly, t
 
 I have been working on extracting the DFT calculated 3D information from the PubChemQC dataset, and augmenting the OGB-LSC dataset with it. It is still a work and progress and it is currently only 80% the size of the original. Consider this dataset in 'beta' and I do not guarantee it's correctness yet.   
 The dataset is pytorch geometric compatible and located at **/mnt/dive/shared/kaleb/Datasets/OGB-LSC-3D**. This should already be processed and be compatible with the OGB package. Note that the number of features per node is now 12 (from 9). The x, y, and z coordinates are at the end of the feature vector. There is a pickled split dictionary you can use instead of the built in one.  
-Instead of
+Instead of:
 ```py
 split_idx = dataset.get_idx_split()
 ```
-Use
+Use:
 ```py
 split_idx = pickle.load(open("/mnt/dive/shared/kaleb/Datasets/OGB-LSC-3D/pcqm4m_kddcup2021/split_idx3D.p", "rb" ))
 train_loader = DataLoader(dataset[split_idx["train"]], batch_size=batch_size, shuffle=True)
