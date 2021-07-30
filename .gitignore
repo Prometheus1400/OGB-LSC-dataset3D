@@ -12,3 +12,4 @@ ogb_test.py
 temp_storage/
 PubChemPy/
 test.py
+decompressor.py

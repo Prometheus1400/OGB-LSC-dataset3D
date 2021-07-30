@@ -7,6 +7,7 @@ import numpy as np
 import os
 import pubchempy as pcp
 from tqdm import tqdm
+from cclib.io import ccread
 
 class ThreadWithReturn(Thread):
     def __init__(self, group=None, target=None, name=None,
@@ -53,6 +54,18 @@ def smile2CID(smile):
     compounds = pubchempy.get_compounds(smile, namespace='smiles')
     cid = compounds[0].cid
     return cid
+
+def getHOMOLUMO(log_file):
+    """
+    input: path to log file for B3LYP optimized geometry
+    output: HOMO/LUMO gap as float
+    """
+    data = ccread(log_file)
+    homo = data.homos[0]
+    energies = data.moenergies[0]
+    homolumogap = energies[homo+1] - energies[homo]
+    return homolumogap
+
 
 
 
