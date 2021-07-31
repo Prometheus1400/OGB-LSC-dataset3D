@@ -7,13 +7,22 @@ All data is hosted on the shared drive.
 3. [Local Database](#3)
 
 ## Overview of PubChemQC  <a id="1"></a>
-The OGB-LSC dataset is a based of the PubChemQC dataset (which is itself a subset of PubChem). OGB-LSC contains 3,803,453 molecules and PubChemQC contains 3,981,230. The PubChemQC dataset was generated using only CID (Chemical ID), InChI, and isomeric SMILES. All the calculations were performed from this information.
+The OGB-LSC dataset is a based of the PubChemQC dataset (which is itself a subset of PubChem). OGB-LSC contains 3,803,453 molecules and PubChemQC contains 3,981,230. The PubChemQC dataset was generated using only CID (Chemical ID), InChI, and isomeric SMILES. All the calculations were performed from this information. Dataset located at **/mnt/dive/shared/kaleb/Datasets/PubChemQC**
 The main contributions of the PubChemQC dataset are as follows:  
 * Molecular structures optimized by density functional theory (DFT)
 * Calculated the excited states for over 2 million molecules using time-dependent DFT (TDDFT)
 Note that PubChemQC does not provide SMILES or InChI representations directly, this information is in The PubChem Project
 
 #### Obtaining HOMO/LUMO gap <a id="1.1"></a>
+Each molecule directory contains a log.xz file. This needs to be decompressed and then the HOMO/LUMO gap can be obtained in the following way:
+```py
+from cclib import ccread
+
+data = ccread(log_file) //log_file is path to decompressed .log file
+homo = data.homos[0]
+energies = data.moenergies[0]
+homolumogap = energies[homo+1] - energies[homo]
+```
 ## OGB-LSC Dataset With 3D Information <a id="2"></a>
 
 I have been working on extracting the DFT calculated 3D information from the PubChemQC dataset, and augmenting the OGB-LSC dataset with it. It is still a work and progress and it is currently only 80% the size of the original. Consider this dataset in 'beta' and I do not guarantee it's correctness yet.   
