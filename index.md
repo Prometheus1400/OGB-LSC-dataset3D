@@ -2,7 +2,7 @@ All data is hosted on the shared drive.
 
 #### Table of contents
 1. [Overview of PubChemQC](#1)
-    a. []
+    1.1 [Obtaining HOMO/LUMO Gap](#1.1)
 2. [OGB-LSC Dataset With 3D Information](#2)
 3. [Local Database](#3)
 
