@@ -2,6 +2,7 @@ All data is hosted on the shared drive.
 
 #### Table of contents
 1. [Overview of PubChemQC](#1)
+    a. []
 2. [OGB-LSC Dataset With 3D Information](#2)
 3. [Local Database](#3)
 
@@ -12,6 +13,7 @@ The main contributions of the PubChemQC dataset are as follows:
 * Calculated the excited states for over 2 million molecules using time-dependent DFT (TDDFT)
 Note that PubChemQC does not provide SMILES or InChI representations directly, this information is in The PubChem Project
 
+#### Obtaining HOMO/LUMO gap <a id="1.1"></a>
 ## OGB-LSC Dataset With 3D Information <a id="2"></a>
 
 I have been working on extracting the DFT calculated 3D information from the PubChemQC dataset, and augmenting the OGB-LSC dataset with it. It is still a work and progress and it is currently only 80% the size of the original. Consider this dataset in 'beta' and I do not guarantee it's correctness yet.   

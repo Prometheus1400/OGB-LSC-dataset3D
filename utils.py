@@ -8,6 +8,7 @@ import os
 import pubchempy as pcp
 from tqdm import tqdm
 from cclib.io import ccread
+from cclib import ccopen
 
 class ThreadWithReturn(Thread):
     def __init__(self, group=None, target=None, name=None,
