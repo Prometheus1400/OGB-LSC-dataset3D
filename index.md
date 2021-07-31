@@ -18,7 +18,7 @@ Each molecule directory contains a log.xz file. This needs to be decompressed an
 ```py
 from cclib import ccread
 
-data = ccread(log_file) //log_file is path to decompressed .log file
+data = ccread(log_file) #log_file is path to decompressed .log file
 homo = data.homos[0]
 energies = data.moenergies[0]
 homolumogap = energies[homo+1] - energies[homo]
