@@ -10,11 +10,11 @@ The main contributions of the PubChemQC dataset are as follows:
 * Molecular structures optimized by density functional theory (DFT)
 * Calculated the excited states for over 2 million molecules using time-dependent DFT (TDDFT)
 * GAMESS log from which different properties can be obtained like:
-    *atomnos
-    *atomcoords
-    *atomcharges
-    *moenergies
-    *and many others  
+    * atomnos
+    * atomcoords
+    * atomcharges
+    * moenergies
+    * and many others  
 Note that PubChemQC does not provide SMILES or InChI representations directly, this information is in The PubChem Project
 
 ### Getting Mol Object with RDkit <a id="1.1"></a>
