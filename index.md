@@ -33,15 +33,18 @@ However, for many of the .mol files, RDkit will generate an error in the followi
 I do still think RDkit is the way to go, because each atom is guaranteed to have to correct coordinates, compared to mapping the coordinates manually which is error prone as it is easy to accidentally assign coordinates to the wrong atoms of same atomic number.
 
 #### Obtaining HOMO/LUMO gap <a id="1.2"></a>
-Each molecule directory contains a log.xz file. This needs to be decompressed and then the HOMO/LUMO gap can be obtained in the following way:
+Each molecule directory contains a log.xz file. This can be used directly to obtain the HOMO-LUMO gap like so:
 ```py
 from cclib import ccread #ccread requires open_babel to be installed
+import lzma
 
-data = ccread(log_file) #log_file is path to decompressed .log file
+with lzma.open(log_file, mode='rt') as file:
+    data = ccread(file)
 homo = data.homos[0]
 energies = data.moenergies[0]
 homolumogap = energies[homo+1] - energies[homo]
 ```
+The log files are quite large, and parsing them with ccread is fairly slow.
 ## OGB-LSC Dataset With 3D Information <a id="2"></a>
 
 I have been working on extracting the DFT calculated 3D information from the PubChemQC dataset, and augmenting the OGB-LSC dataset with it. It is still a work in progress and it is currently only 80% the size of the original. Consider this dataset in 'beta' and I do not guarantee it's correctness yet.   
