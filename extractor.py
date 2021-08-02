@@ -269,8 +269,5 @@ class MyDataset(InMemoryDataset):
 path2tars = "/mnt/dive/shared/kaleb/Datasets/PubChemQC"
 dataset = MyDataset(root="/home/ugrads/k/kaleb.dickerson2001/OGB-LSC-dataset3D",
                     path2tars=path2tars,
-                    make_dataset=make_dataset
-)
-
-for d in dataset:
-    print(d)
+                    make_dataset=make_dataset)
+                    

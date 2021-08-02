@@ -14,3 +14,4 @@ PubChemPy/
 test.py
 decompressor.py
 OGB-LSC3D/
+valid_molecules_writer.py
