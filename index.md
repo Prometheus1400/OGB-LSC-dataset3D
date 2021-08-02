@@ -2,8 +2,8 @@
 1. [Overview of PubChemQC](#1)  
     1.1 [Getting Mol Object with RDkit](#1.1)  
     1.2 [Obtaining HOMO/LUMO Gap with cclib](#1.2)
-2. [OGB-LSC Dataset With 3D Information](#2)
-3. [Local Database](#3)
+<!-- 2. [OGB-LSC Dataset With 3D Information](#2)
+3. [Local Database](#3) -->
 
 ## Overview of PubChemQC  <a id="1"></a>
 The OGB-LSC dataset is a based of the PubChemQC dataset (which is itself a subset of PubChem). OGB-LSC contains 3,803,453 molecules and PubChemQC contains 3,981,230. The PubChemQC dataset was generated using only CID (Chemical ID), InChI, and isomeric SMILES. All the calculations were performed from this information. Dataset located at **/mnt/dive/shared/kaleb/Datasets/PubChemQC**  
