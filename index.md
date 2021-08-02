@@ -8,7 +8,13 @@
 The OGB-LSC dataset is a based of the PubChemQC dataset (which is itself a subset of PubChem). OGB-LSC contains 3,803,453 molecules and PubChemQC contains 3,981,230. The PubChemQC dataset was generated using only CID (Chemical ID), InChI, and isomeric SMILES. All the calculations were performed from this information. Dataset located at **/mnt/dive/shared/kaleb/Datasets/PubChemQC**  
 The main contributions of the PubChemQC dataset are as follows:  
 * Molecular structures optimized by density functional theory (DFT)
-* Calculated the excited states for over 2 million molecules using time-dependent DFT (TDDFT)  
+* Calculated the excited states for over 2 million molecules using time-dependent DFT (TDDFT)
+* GAMESS log from which different properties can be obtained like:
+    *atomnos
+    *atomcoords
+    *atomcharges
+    *moenergies
+    *and many others  
 Note that PubChemQC does not provide SMILES or InChI representations directly, this information is in The PubChem Project
 
 ### Getting Mol Object with RDkit <a id="1.1"></a>
