@@ -14,7 +14,7 @@ The main contributions of the PubChemQC dataset are as follows:
 * Calculated the excited states for over 2 million molecules using time-dependent DFT (TDDFT)
 Note that PubChemQC does not provide SMILES or InChI representations directly, this information is in The PubChem Project
 
-#### Getting Mol Object with RDkit <a id="1.2"></a>
+#### Getting Mol Object with RDkit <a id="1.1"></a>
 PubChemQC has a .mol file for each molecule. This file can be conveniently read using RDkit to generate a molecule object with the 3D information like so:
 ```py
 from rdkit import Chem
