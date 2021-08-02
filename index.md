@@ -15,6 +15,7 @@ The main contributions of the PubChemQC dataset are as follows:
     * atomcharges
     * moenergies
     * and many others  
+    
 Note that PubChemQC does not provide SMILES or InChI representations directly, this information is in The PubChem Project
 
 ### Getting Mol Object with RDkit <a id="1.1"></a>
