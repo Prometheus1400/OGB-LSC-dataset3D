@@ -27,7 +27,7 @@ for s in sub:
     atom_coords = list(conf.GetAtomPosition(s))))
 ```
 However, for many of the .mol files, RDkit will generate an error in the following form "Explicit valence for atom \_\_\_\_ is greater than permitted". I am waiting on a response from the RDkit developers why this might be the case, and how to proceed with the calculations.  
-I do still think RDkit is the way to go, because each atom is guaranteed to have to correct coordinates, compared to mapping the coordinates manually which is error prone as it is easy to assign coordinates to the wrong atoms of same atomic number.
+I think RDkit is the way to go, because each atom is guaranteed to have to correct coordinates, and it is consistent with OGB-LSC. Compare to mapping the coordinates manually which is error prone as it is easy to assign coordinates to the wrong atoms of same atomic number.
 
 ### Obtaining HOMO/LUMO gap <a id="1.2"></a>
 Each molecule directory contains a log.xz file. This can be used directly to obtain the HOMO-LUMO gap like so:
