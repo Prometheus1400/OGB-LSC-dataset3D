@@ -2,7 +2,8 @@
 1. [Overview of PubChemQC](#1)  
     1.1 [Getting Mol Object with RDkit](#1.1)  
     1.2 [Obtaining HOMO/LUMO Gap with cclib](#1.2)  
-2. [Closing Comments](#2)
+2. [OGB-LSC 3D](#2)
+3. [Closing Comments](#3)
 
 ## Overview of PubChemQC  <a id="1"></a>
 The OGB-LSC dataset is a based of the PubChemQC dataset (which is itself a subset of PubChem). OGB-LSC contains 3,803,453 molecules and PubChemQC contains 3,981,230. The PubChemQC dataset was generated using only CID (Chemical ID), InChI, and isomeric SMILES. All the calculations were performed from this information. Dataset located at **/mnt/dive/shared/kaleb/Datasets/PubChemQC**  
@@ -10,12 +11,12 @@ The main contributions of the PubChemQC dataset are as follows:
 * Molecular structures optimized by density functional theory (DFT)
 * Calculated the excited states for over 2 million molecules using time-dependent DFT (TDDFT)
 * GAMESS log from which different properties can be obtained like:
-    * atomnos
-    * atomcoords
-    * atomcharges
-    * moenergies
+    * atomic numbers
+    * atom coords
+    * atom charges
+    * molecular energies
     * and many others  
-    
+
 Note that PubChemQC does not provide SMILES or InChI representations directly, this information is in The PubChem Project
 
 ### Getting Mol Object with RDkit <a id="1.1"></a>
@@ -50,7 +51,11 @@ homolumogap = energies[homo+1] - energies[homo]
 ```
 The log files are quite large, and parsing them with ccread is fairly slow.
 
-## Closing Comments  <a id="2"></a>
+## OGB-LSC 3D  <a id="2"></a>
+So far, I have managed to make a dataset about 80% the size of OGB-LSC. I am not sure the coordinates are accurate because I mapped these manually, which is error prone as stated before.
+The processed dataset is located at **/mnt/dive/shared/kaleb/Datasets/OGB-LSC-3D** and should work with the OGB package.
+
+## Closing Comments  <a id="3"></a>
 Trying to map the coordinates from PubChemQC to the molecules in OGB-LSC is tricky, I think generating our own dataset may be a better option.  
 On the other hand, reading and parsing millions of files from the shared drive is extremely slow, and there is still the issue with RDkit.
 
