@@ -93,6 +93,18 @@ def bond_to_feature_vector(bond):
             ]
     return bond_feature
 
+def getHOMOLUMO(log_file):
+    """
+    input: molecule compressed log file
+    output: homo-lumo gap as float
+    """
+    with lzma.open(log_file, mode='rt') as file:
+        data = ccread(file)
+    homo = data.homos[0]
+    energies = data.moenergies[0]
+    homolumogap = energies[homo+1] - energies[homo]
+    return homolumogap
+
 def mol2graph(mol):
     """
     Converts rdki Mol object to graph Data object
@@ -143,18 +155,6 @@ def mol2graph(mol):
     graph['num_nodes'] = len(x)
 
     return graph
-
-def getHOMOLUMO(log_file):
-    """
-    input: molecule compressed log file
-    output: homo-lumo gap as float
-    """
-    with lzma.open(log_file, mode='rt') as file:
-        data = ccread(file)
-    homo = data.homos[0]
-    energies = data.moenergies[0]
-    homolumogap = energies[homo+1] - energies[homo]
-    return homolumogap
 
 def make_dataset(dir_list):
     if len(dir_list) == 0:
