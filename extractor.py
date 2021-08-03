@@ -98,12 +98,15 @@ def getHOMOLUMO(log_file):
     input: molecule compressed log file
     output: homo-lumo gap as float
     """
-    with lzma.open(log_file, mode='rt') as file:
-        data = ccread(file)
-    homo = data.homos[0]
-    energies = data.moenergies[0]
-    homolumogap = energies[homo+1] - energies[homo]
-    return homolumogap
+    try:
+        with lzma.open(log_file, mode='rt') as file:
+            data = ccread(file)
+        homo = data.homos[0]
+        energies = data.moenergies[0]
+        homolumogap = energies[homo+1] - energies[homo]
+        return homolumogap
+    except Exception:
+        return None
 
 def mol2graph(mol):
     """
@@ -179,31 +182,27 @@ def make_dataset(dir_list):
             if exists:
                 mol_file = "".join([mol_dir_path, "/", i_pad, ".mol"])
                 log_file = "".join([mol_dir_path, "/", i_pad, ".b3lyp_6-31g(d).log.xz"])
-                if not (os.path.exists(mol_file) and os.path.exists(log_file)):
-                    continue
-                mol = Chem.MolFromMolFile(mol_file)
-                if mol == None:
-                    # print(f"{mol_file} not valid")
-                    continue
+                if os.path.exists(mol_file) and os.path.exists(log_file):
+                    mol = Chem.MolFromMolFile(mol_file)
+                    if mol != None:
+                        graph = mol2graph(mol)
+                        homolumogap = getHOMOLUMO(log_file)
+                        if homolumogap != None:
+                            assert(len(graph['edge_feat']) == graph['edge_index'].shape[1])
+                            assert(len(graph['node_feat']) == graph['num_nodes'])
 
-                graph = mol2graph(mol)
-                homolumogap = getHOMOLUMO(log_file)
-
-                assert(len(graph['edge_feat']) == graph['edge_index'].shape[1])
-                assert(len(graph['node_feat']) == graph['num_nodes'])
-
-                data = Data()
-                data.__num_nodes__ = int(graph['num_nodes'])
-                data.edge_index = torch.from_numpy(graph['edge_index']).to(torch.int64)
-                data.edge_attr = torch.from_numpy(graph['edge_feat']).to(torch.int64)
-                data.x = torch.from_numpy(graph['node_feat']).to(torch.float64)
-                data.y = torch.Tensor([homolumogap])
-                data_list.append(data)
+                            data = Data()
+                            data.__num_nodes__ = int(graph['num_nodes'])
+                            data.edge_index = torch.from_numpy(graph['edge_index']).to(torch.int64)
+                            data.edge_attr = torch.from_numpy(graph['edge_feat']).to(torch.int64)
+                            data.x = torch.from_numpy(graph['node_feat']).to(torch.float64)
+                            data.y = torch.Tensor([homolumogap])
+                            data_list.append(data)
     return data_list
 
 def make_threads(list_obj):
     if __name__ == "__main__":
-        NUM_THREADS = 4
+        NUM_THREADS = 8
         _dir_list_fragmented = split_into(list_obj, NUM_THREADS)
         T = []
         for i in range(NUM_THREADS):

@@ -34,13 +34,13 @@ for s in sub:
     atom = mol.GetAtoms()[s]
     atom_coords = list(conf.GetAtomPosition(s))))
 ```
-However, for many of the .mol files, RDkit will generate an error in the following form "Explicit valence for atom \_\_\_\_ is greater than permitted". I am waiting on a response from the RDkit developers why this might be the case, and how to proceed with the calculations.  
+However, for many of the .mol files, RDkit will generate an error in the following form "Explicit valence for atom \_\_\_\_ is greater than permitted". Open Babel also generates a warning indicating this is an issue with the molecule not with RDkit. I am waiting on a response from the RDkit developers why this might be the case, and how to proceed with the calculations.  
 I think RDkit is the way to go, because each atom is guaranteed to have to correct coordinates, and it is consistent with OGB-LSC. Compare to mapping the coordinates manually which is error prone as it is easy to assign coordinates to the wrong atoms of same atomic number.
 
 ### Obtaining HOMO/LUMO gap <a id="1.2"></a>
 Each molecule directory contains a log.xz file. This can be used directly to obtain the HOMO-LUMO gap like so:
 ```py
-from cclib import ccread #ccread requires open_babel to be installed
+from cclib.io import ccread #ccread requires open_babel to be installed
 import lzma
 
 with lzma.open(log_file, mode='rt') as file:
@@ -54,6 +54,7 @@ The log files are quite large, and parsing them with ccread is fairly slow.
 ## OGB-LSC 3D  <a id="2"></a>
 So far, I have managed to make a dataset about 80% the size of OGB-LSC. I am not sure the coordinates are accurate because I mapped these manually, which is error prone as stated before.
 The processed dataset is located at **/mnt/dive/shared/kaleb/Datasets/OGB-LSC-3D** and should work with the OGB package.
+I am currently constructing a database with the valid molecules from PubChemQC, this is taking a while and I don't know how many molecules will be present there.
 
 ## Closing Comments  <a id="3"></a>
 Trying to map the coordinates from PubChemQC to the molecules in OGB-LSC is tricky, I think generating our own dataset may be a better option.  
