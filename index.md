@@ -54,7 +54,6 @@ The log files are quite large, and parsing them with ccread is extremely slow.
 ## OGB-LSC 3D  <a id="2"></a>
 So far, I have managed to make a dataset about 80% the size of OGB-LSC. I am not sure the coordinates are accurate because I mapped these manually, which is error prone as stated before.
 The processed dataset is located at **/mnt/dive/shared/kaleb/Datasets/OGB-LSC-3D** and should work with the OGB package.
-I am currently constructing a database with the valid molecules from PubChemQC, this is taking a while and I don't know how many molecules will be present there.
 
 ## Closing Comments  <a id="3"></a>
 Trying to map the coordinates from PubChemQC to the molecules in OGB-LSC is tricky, I think generating our own dataset may be a better option.  
